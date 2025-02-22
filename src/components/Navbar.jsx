@@ -41,7 +41,7 @@ const Navbar = () => {
         };
   
         // Send user data to the backend
-        fetch("http://localhost:5000/users", {
+        fetch("https://task-management-server-zeta-six.vercel.app/users", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

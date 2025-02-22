@@ -17,7 +17,7 @@ const TaskManagementApp = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/tasks")
+      .get("https://task-management-server-zeta-six.vercel.app/tasks")
       .then((response) => {
         console.log("Fetched raw tasks from backend:", response.data);
   
@@ -80,7 +80,7 @@ const TaskManagementApp = () => {
     };
 
     axios
-      .post("http://localhost:5000/tasks", task)
+      .post("https://task-management-server-zeta-six.vercel.app/tasks", task)
       .then((response) => {
         console.log("Task added:", response.data);
 
@@ -94,6 +94,55 @@ const TaskManagementApp = () => {
       })
       .catch((error) => console.error("Error adding task:", error));
   };
+
+  const onUpdateTask = (taskId, newTitle, newDescription) => {
+    axios
+      .put(`https://task-management-server-zeta-six.vercel.app/tasks/${taskId}`, {
+        title: newTitle,
+        description: newDescription,
+      })
+      .then((response) => {
+        // Update state: find and update the task in the right category
+        setTasks((prevTasks) => {
+          const updatedTasks = { ...prevTasks };
+          Object.keys(updatedTasks).forEach((category) => {
+            updatedTasks[category] = updatedTasks[category].map((task) => {
+              // Compare as strings if needed
+              if (task._id.toString() === taskId.toString()) {
+                return { ...task, title: newTitle, description: newDescription };
+              }
+              return task;
+            });
+          });
+          return updatedTasks;
+        });
+      })
+      .catch((error) => {
+        console.error("Error updating task:", error);
+      });
+  };
+
+  // Function to delete a task
+  const onDeleteTask = (taskId) => {
+    axios
+      .delete(`https://task-management-server-zeta-six.vercel.app/tasks/${taskId}`)
+      .then((response) => {
+        // Remove the task from state
+        setTasks((prevTasks) => {
+          const updatedTasks = { ...prevTasks };
+          Object.keys(updatedTasks).forEach((category) => {
+            updatedTasks[category] = updatedTasks[category].filter(
+              (task) => task._id.toString() !== taskId.toString()
+            );
+          });
+          return updatedTasks;
+        });
+      })
+      .catch((error) => {
+        console.error("Error deleting task:", error);
+      });
+  };
+
 
   const onDragEnd = (event) => {
     const { active, over } = event;
@@ -138,7 +187,7 @@ const TaskManagementApp = () => {
   
     // Update backend
     axios
-      .put(`http://localhost:5000/tasks/${movedTask._id}`, { category: destinationCategory })
+      .put(`https://task-management-server-zeta-six.vercel.app/tasks/${movedTask._id}`, { category: destinationCategory })
       .then(() => console.log(`✅ Task moved to ${destinationCategory}`))
       .catch((error) => console.error("❌ Error updating task:", error));
   };
