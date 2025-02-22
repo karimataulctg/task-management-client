@@ -4,7 +4,7 @@
 A Task Management Application that allows users to add, edit, delete, and reorder tasks using a drag-and-drop interface. Tasks are categorized into three sections: To-Do, In Progress, and Done. Changes are saved instantly to the database to maintain persistence. The app is fully responsive and features a clean, minimalistic UI.
 
 ## Live Link
-[]()
+[https://task-management-c707e.web.app/](https://task-management-c707e.web.app/)
 
 ## Dependencies
 ### Frontend
