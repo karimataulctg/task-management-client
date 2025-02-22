@@ -8,8 +8,8 @@ import {
 } from "react-router-dom";
 import MainLayout from './components/MainLayout';
 import AuthProvider from './Authprovider';
-import { Home } from 'lucide-react';
 import TaskManagementApp from './taskManagement/TaskManagementApp';
+import Home from './components/Home';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-      element: <Home></Home>,
+      element: <Home></Home>
       },
       {
         path: "/taskManagement",

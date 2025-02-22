@@ -19,25 +19,54 @@ const TaskManagementApp = () => {
     axios
       .get("http://localhost:5000/tasks")
       .then((response) => {
-        console.log("Fetched tasks from backend:", response.data);
-
-        if (Array.isArray(response.data)) {
-          const categorizedTasks = {
-            todo: response.data.filter((task) => task.category === "To-Do"),
-            inProgress: response.data.filter(
-              (task) => task.category === "In-Progress"
-            ),
-            done: response.data.filter((task) => task.category === "Done"),
-          };
-
-          setTasks(categorizedTasks);
+        console.log("Fetched raw tasks from backend:", response.data);
+  
+        // Ensure response is an array
+        const tasksArray = Array.isArray(response.data)
+          ? response.data
+          : response.data.tasks || [];
+  
+        console.log("Processed tasks array:", tasksArray);
+  
+        if (!Array.isArray(tasksArray)) {
+          console.error("Invalid response format:", response.data);
+          return;
         }
+  
+        // Log category values before filtering
+        tasksArray.forEach((task) =>
+          console.log(`Task: ${task.title}, Category: "${task.category}"`)
+        );
+  
+        // Normalize category names
+        const categorizedTasks = {
+          todo: tasksArray.filter(
+            (task) =>
+              task.category?.trim().toLowerCase() === "to-do" ||
+              task.category?.trim().toLowerCase() === "todo"
+          ),
+          inProgress: tasksArray.filter(
+            (task) =>
+              task.category?.trim().toLowerCase() === "in-progress" ||
+              task.category?.trim().toLowerCase() === "inprogress"
+          ),
+          done: tasksArray.filter(
+            (task) =>
+              task.category?.trim().toLowerCase() === "done"
+          ),
+        };
+  
+        console.log("Categorized tasks:", categorizedTasks);
+  
+        setTasks(categorizedTasks);
       })
       .catch((error) => {
         console.error("Error fetching tasks:", error);
         setTasks({ todo: [], inProgress: [], done: [] });
       });
   }, []);
+  
+  
 
   const addTask = () => {
     if (!newTask.trim() || !description.trim()) return;

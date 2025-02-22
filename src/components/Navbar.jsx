@@ -16,7 +16,14 @@ const Navbar = () => {
   const handleSignOut = () => {
     signOutUser()
       .then(() => {
-        alert('You have successfully signed out!');
+        Swal.fire({
+            title: "Logged Out",
+            text: "You've logged out successfully.",
+            icon: "success",
+            confirmButtonText: "Okay",
+            
+          });
+        
         navigate('/');
       })
       .catch((error) => {
@@ -57,7 +64,7 @@ const Navbar = () => {
           confirmButtonText: "Okay",
         });
   
-        navigate(from, { replace: true });
+        navigate ('/taskManagement')
       })
       .catch((error) => {
         alert(error.message);
@@ -119,7 +126,7 @@ const Navbar = () => {
             ) : (
               <Link
                 className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded"
-                to="/taskManagement"
+                // to="/taskManagement"
                 onClick={handleGoogleLogin}
               >
                 Log In
